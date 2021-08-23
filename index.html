@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Excel</title>
+</head>
+<body>
+    <div class="container">
+        <div class="title-bar">Book-1</div>
+        <div class="menu-bar">
+            <div class="menu-item menu-file">File</div>
+            <div class="menu-item menu-home selected">Home</div>
+            <div class="menu-item menu-insert">Insert</div>
+            <div class="menu-item menu-layout">Layout</div>
+            <div class="menu-item menu-help">Help</div>
+        </div>
+        <div class="menu-icon-bar">
+            <div class="material-icons menu-icon icon-cut">content_cut</div>
+            <div class="material-icons menu-icon icon-copy">content_copy</div>
+            <div class="material-icons menu-icon icon-paste">content_paste</div>
+            <select class="selector font-family-selector">
+                <option style= "font-family: Arial, Helvetica, sans-serif"value="Arial">Arial</option>
+                <option style= "font-family:'Times New Roman', Times, serif"value="Times-New-Roman">Times New Roman</option>
+                <option style= "font-family:Verdana, Geneva, Tahoma, sans-serif"value="Verdana">Verdana</option>
+                <option style= "font-family: 'Courier New', Courier, monospace;"value="Courier">Courier</option>
+                <option style= "font-family:'Lucida Sans', Geneva, Verdana, sans-serif"value="Lucida-Sans">Lucida Sans</option>
+                <option style= "font-family:'Comic Sans MS'"value="Comic Sans">Comic Sans</option>
+            </select>
+            <select class="selector font-size-selector">
+                <option value="10">10</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+                <option value="22">22</option>
+                <option value="24">24</option>
+                <option value="26">26</option>
+                <option value="28">28</option>
+            </select>
+            <div class="material-icons menu-icon icon-bold">format_bold</div>
+            <div class="material-icons menu-icon icon-italic">format_italic</div>
+            <div class="material-icons menu-icon icon-underline">format_underline</div>
+            <div class="material-icons menu-icon icon-align-left">format_align_left</div>
+            <div class="material-icons menu-icon icon-align-center">format_align_center</div>
+            <div class="material-icons menu-icon icon-align-right">format_align_right</div>
+            <div class="material-icons menu-icon icon-color-fill">format_color_fill</div>
+            <div class="material-icons menu-icon icon-color-text">format_color_text</div>
+        </div>
+        <div class="formula-bar"></div>
+        <div class="data-container">
+            <div class="row-name-container"></div>
+            <div class="col-name-container"></div>
+            <div class="input-cell-container"></div>
+        </div>
+        <div class="sheet-bar"></div>
+    </div>
+</body>
+</html>

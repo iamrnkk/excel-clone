@@ -1,0 +1,91 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-size: 14px;
+}
+
+.container{
+    height: 100vh;
+}
+
+.title-bar{
+    height: 5vh;
+    background-color: #107C41;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-bar{
+    height: 5vh;
+    background-color: #107C41;
+    display: flex;
+    align-items: center;
+    
+}
+
+.menu-item{
+    padding: 0 10px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    height:100%
+}
+
+.menu-item:hover{
+    background-color: #0b572d;
+    cursor: pointer;
+}
+
+.menu-item.selected{
+    background-color: #fff;
+    color: #107C41;
+}
+
+.menu-icon-bar{
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    background-color: #F3F2F1;
+}
+
+.menu-icon{
+    padding: 0px 10px;
+    display: flex;
+    align-items: center;
+    height:100%
+}
+
+.selector{
+    height: 65%;
+}
+
+.selector option{
+    font-size: 16px;
+}
+.font-family-selector
+{
+    margin-left: 10px;
+}
+.font-size-selector{
+    margin-right: 10px;
+}
+.menu-icon:hover{
+    background-color: #dfdddb;
+}
+
+.formula-bar{
+    height: 5vh;
+}
+
+.data-container{
+    height: 75vh;
+}
+
+.sheet-bar{
+    height: 4vh;
+}
