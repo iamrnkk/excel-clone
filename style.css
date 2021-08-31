@@ -4,7 +4,8 @@
 
 body{
     margin: 0;
-    font-size: 14px;
+    font-size: 13px;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 .container{
@@ -80,12 +81,125 @@ body{
 
 .formula-bar{
     height: 5vh;
+    display: flex;
+    align-items: center;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    background-color: #F3F2F1;
 }
 
+.formula-editor{
+    height: 70%;
+    border: 1px solid #a8a6a3;
+    background-color: #fff;
+    outline-color: #107C41;
+    display: flex;
+    align-items: center;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
+
+.selected-cell{
+    width: 120px;
+}
+
+.icon-function{
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formula-input{
+    width: calc(100vw - 160px);
+}
 .data-container{
-    height: 75vh;
+    height: 74.8vh;
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.select-all{
+    height: 30px;
+    width: 30px;
+    border: 1px solid #a8a6a3;
+    background-color: #F3F2F1;
+}
+
+.col-name-container{
+    height: 30px;
+    width: calc(100vw - 30px);
+    border: 1px solid #a8a6a3;
+    background-color: #F3F2F1;
+}
+
+.row-name-container{
+    height: calc(74.8vh - 30px);
+    width: 30px;
+    border: 1px solid #a8a6a3;
+    background-color: #F3F2F1;
+}
+
+.input-cell-container{
+    height: calc(74.8vh - 30px);
+    width: calc(100vw - 30px);
+    border: 1px solid #a8a6a3;
 }
 
 .sheet-bar{
     height: 4vh;
+    display: flex;
+    align-items: center;
+    background-color: #dfdddb;
+}
+
+.scroller{
+    width: 60px;
+    
+}
+.icon-scroll-left, .icon-scroll-right
+{
+    font-size: 1.45rem;
+    padding-top: 4px;
+    
+}
+
+.icon-scroll-left:hover, .icon-scroll-right:hover
+{
+    transform: scale(1.2);
+    color: #107C41;
+    cursor: pointer;
+}
+.icon-add{
+    font-size: 1.45rem;
+    width: 35px
+}
+.icon-add:hover{
+    transform: scale(1.2);
+    color: #107C41;
+    cursor: pointer;
+}
+.sheet-tab-container
+{
+    width: calc( 100vw - 95px );
+    display: flex;
+    align-items: center;
+    height: 100%;
+    
+}
+
+.sheet-tab{
+   padding-left: 15px;
+   font-weight: 600;
+   width: 70px;
+   border: 1px solid #a8a6a3;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   border-bottom: 4.5px solid #107C41;
+}
+
+.sheet-tab:hover{
+    cursor: default;
 }
