@@ -58,7 +58,8 @@ body{
     padding: 0px 10px;
     display: flex;
     align-items: center;
-    height:100%
+    height: 80%;
+    margin-right: 5px;
 }
 
 .selector{
@@ -76,9 +77,14 @@ body{
     margin-right: 10px;
 }
 .menu-icon:hover{
-    background-color: #dfdddb;
+    color: #107C41;
+    cursor: pointer;
 }
 
+.menu-icon.selected{
+    background-color: #dfdddb;
+    color: #107C41;
+}
 .formula-bar{
     height: 5vh;
     display: flex;
@@ -132,21 +138,63 @@ body{
     width: calc(100vw - 30px);
     border: 1px solid #a8a6a3;
     background-color: #F3F2F1;
+    display: flex;
+    overflow: hidden;
 }
 
+.col-name{
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid #a8a6a3;
+    font-weight: bold;
+}
 .row-name-container{
     height: calc(74.8vh - 30px);
     width: 30px;
     border: 1px solid #a8a6a3;
     background-color: #F3F2F1;
+    overflow: hidden;
+}
+
+.row-name
+{
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid #a8a6a3;
+    font-weight: bold;
 }
 
 .input-cell-container{
     height: calc(74.8vh - 30px);
     width: calc(100vw - 30px);
     border: 1px solid #a8a6a3;
+    overflow: hidden;
 }
 
+.cell-row{
+    display: flex;
+}
+
+.input-cell
+{
+    min-width: 100px;
+    min-height: 30px;
+    border-bottom: 2px solid #a8a6a3;
+    border-right: 2px solid #a8a6a3;
+    
+    display: flex;
+    align-items: flex-end;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
+.input-cell.selected{
+    border: 3px solid #107C41;
+}
 .sheet-bar{
     height: 4vh;
     display: flex;

@@ -79,26 +79,14 @@
           <option value="26">26</option>
           <option value="28">28</option>
         </select>
-        <div class="material-icons menu-icon icon-bold">format_bold</div>
-        <div class="material-icons menu-icon icon-italic">format_italic</div>
-        <div class="material-icons menu-icon icon-underline">
-          format_underline
-        </div>
-        <div class="material-icons menu-icon icon-align-left">
-          format_align_left
-        </div>
-        <div class="material-icons menu-icon icon-align-center">
-          format_align_center
-        </div>
-        <div class="material-icons menu-icon icon-align-right">
-          format_align_right
-        </div>
-        <div class="material-icons menu-icon icon-color-fill">
-          format_color_fill
-        </div>
-        <div class="material-icons menu-icon icon-color-text">
-          format_color_text
-        </div>
+        <div class="material-icons menu-icon style-icon icon-bold">format_bold</div>
+        <div class="material-icons menu-icon style-icon icon-italic">format_italic</div>
+        <div class="material-icons menu-icon style-icon icon-underline">format_underline</div>
+        <div class="material-icons menu-icon align-icon icon-align-left selected">format_align_left</div>
+        <div class="material-icons menu-icon align-icon icon-align-center">format_align_center</div>
+        <div class="material-icons menu-icon align-icon icon-align-right">format_align_right</div>
+        <div class="material-icons menu-icon icon-color-fill">format_color_fill</div>
+        <div class="material-icons menu-icon icon-color-text">format_color_text</div>
       </div>
       <div class="formula-bar">
         <div class="formula-editor selected-cell" contenteditable="true"></div>
@@ -126,9 +114,24 @@
       </div>
       <div class="data-container">
         <div class="select-all"></div>
-        <div class="col-name-container"></div>
-        <div class="row-name-container"></div>
-        <div class="input-cell-container"></div>
+        <div class="col-name-container">
+          <!-- <div class="col-name">A</div>
+          <div class="col-name">B</div> -->
+        </div>
+        <div class="row-name-container">
+          <!-- <div class="row-name">1</div>
+          <div class="row-name">2</div> -->
+        </div>
+        <div class="input-cell-container">
+          <!-- <div class="cell-row">
+            <div class="input-cell"></div>
+            <div class="input-cell"></div>
+          </div>
+          <div class="cell-row">
+            <div class="input-cell" id="A1" cell-address="A1"></div>
+            <div class="input-cell"></div>
+          </div> -->
+        </div>
       </div>
       <div class="sheet-bar">
         <div class="scroller">
@@ -141,5 +144,7 @@
         </div>
       </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
   </body>
 </html>
