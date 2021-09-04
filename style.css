@@ -172,7 +172,7 @@ body{
     height: calc(74.8vh - 30px);
     width: calc(100vw - 30px);
     border: 1px solid #a8a6a3;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .cell-row{
@@ -185,7 +185,7 @@ body{
     min-height: 30px;
     border-bottom: 2px solid #a8a6a3;
     border-right: 2px solid #a8a6a3;
-    
+    outline: 0;
     display: flex;
     align-items: flex-end;
     padding-left: 0.3rem;
@@ -195,6 +195,23 @@ body{
 .input-cell.selected{
     border: 3px solid #107C41;
 }
+
+.input-cell.top-cell-selected{
+    border-top: none;
+}
+
+.input-cell.bottom-cell-selected{
+    border-bottom: 2px solid #a8a6a3;
+}
+
+.input-cell.right-cell-selected{
+    border-right: 2px solid #a8a6a3;;
+}
+
+.input-cell.left-cell-selected{
+    border-left: none;
+}
+
 .sheet-bar{
     height: 4vh;
     display: flex;
