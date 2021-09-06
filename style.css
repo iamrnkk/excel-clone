@@ -12,6 +12,7 @@ body{
     height: 100vh;
 }
 
+/* ------------ Title-Bar ---------------------- */
 .title-bar{
     height: 5vh;
     background-color: #107C41;
@@ -20,7 +21,9 @@ body{
     align-items: center;
     justify-content: center;
 }
+/* --------------------------------------------- */
 
+/* ------------ Menu-Bar ---------------------- */
 .menu-bar{
     height: 5vh;
     background-color: #107C41;
@@ -46,7 +49,9 @@ body{
     background-color: #fff;
     color: #107C41;
 }
+/* ------------------------------------------------- */
 
+/* ------------ Menu-Icon-Bar ---------------------- */
 .menu-icon-bar{
     height: 6vh;
     display: flex;
@@ -85,6 +90,10 @@ body{
     background-color: #dfdddb;
     color: #107C41;
 }
+/* ----------------------------------------------- */
+
+
+/* ------------ Formula-Bar ---------------------- */
 .formula-bar{
     height: 5vh;
     display: flex;
@@ -119,6 +128,9 @@ body{
 .formula-input{
     width: calc(100vw - 160px);
 }
+/* ------------------------------------------------ */
+
+/* ------------Data-Container---------------------- */
 .data-container{
     height: 74.8vh;
     width: 100vw;
@@ -186,8 +198,7 @@ body{
     border-bottom: 2px solid #a8a6a3;
     border-right: 2px solid #a8a6a3;
     outline: 0;
-    display: flex;
-    align-items: flex-end;
+    padding-top: 0.4rem;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
 }
@@ -211,7 +222,9 @@ body{
 .input-cell.left-cell-selected{
     border-left: none;
 }
+/* --------------------------------------------- */
 
+/* ------------ Sheet-Bar ---------------------- */
 .sheet-bar{
     height: 4vh;
     display: flex;
@@ -223,6 +236,7 @@ body{
     width: 60px;
     
 }
+
 .icon-scroll-left, .icon-scroll-right
 {
     font-size: 1.45rem;

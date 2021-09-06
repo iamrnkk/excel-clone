@@ -1,3 +1,24 @@
+//  ------------------ Global Parameters------------------------------------
+const defaultProperties= {
+    text: "",
+    "font-weight": "",
+    "font-style":"",
+    "text-decoration":"",
+    "text-align": "left",
+    "background-color": "white",
+    "color": "black",
+    "font-family": "Arial",
+};
+
+const cellData={
+    "Sheet1": {}
+};
+
+const selectedSheet= "Sheet1";
+const totalSheets= 1;
+
+// ----------------------------------------------------------------------------
+
 $(document).ready(function(){
 
     // add row and col no in .col-name-container and .row-name-container
@@ -48,7 +69,20 @@ $(document).ready(function(){
 
         $(".align-icon.selected").removeClass("selected");
         $(this).addClass("selected");
-        $(this).focus();
+    });
+
+    $(".icon-align-left").click(function(){
+        if($(this).hasClass("selected")) updateCell("text-align","left", true);
+        
+    });
+
+    $(".icon-align-right").click(function(){
+        if($(this).hasClass("selected")) updateCell("text-align","right", false);
+
+    });
+
+    $(".icon-align-center").click(function(){
+        if($(this).hasClass("selected")) updateCell("text-align","center", false); 
     });
 
     $(".style-icon").click(function(){
@@ -56,36 +90,18 @@ $(document).ready(function(){
     });
 
     $(".icon-bold").click(function(){
-        if($(this).hasClass("selected"))
-        {
-            updateCell("font-weight","bold");
-        }
-        else 
-        {
-            updateCell("font-weight","");
-        }
+        if($(this).hasClass("selected")) updateCell("font-weight","bold", false);
+        else updateCell("font-weight","", true);
     });
 
     $(".icon-italic").click(function(){
-        if($(this).hasClass("selected"))
-        {
-            updateCell("font-style","italic");
-        }
-        else 
-        {
-            updateCell("font-style","");
-        }
+        if($(this).hasClass("selected")) updateCell("font-style","italic", false);
+        else updateCell("font-style","",true);
     });
 
     $(".icon-underline").click(function(){
-        if($(this).hasClass("selected"))
-        {
-            updateCell("text-decoration","underline");
-        }
-        else 
-        {
-            updateCell("text-decoration","");
-        }
+        if($(this).hasClass("selected")) updateCell("text-decoration","underline",false);
+        else updateCell("text-decoration","",true);
     });
 
     $(".input-cell").click(function(e){
@@ -142,6 +158,8 @@ $(document).ready(function(){
             $(".input-cell[contenteditable=true]").attr("contenteditable","false");
         }
         $(this).addClass("selected");
+
+        changeHeader(this);
     });
 
     $(".input-cell").dblclick(function(){
@@ -156,6 +174,9 @@ $(document).ready(function(){
         $(".row-name-container").scrollTop(this.scrollTop);
     });
 
+
+// ------------------------ Functions section ---------------------------------
+
     function getRowCol(e)
     {
         let id= $(e).attr("id").split("-");
@@ -165,12 +186,44 @@ $(document).ready(function(){
         return [rowId,colId];
     }
 
-    function updateCell(property,val)
+    function changeHeader(e)
+    {
+        let [rowId,colId]= getRowCol(e);
+
+        let cellInfo= defaultProperties;
+        if(cellData[selectedSheet][rowId] &&  cellData[selectedSheet][rowId][colId] ) 
+            cellInfo= cellData[selectedSheet][rowId][colId];
+
+
+        cellInfo["font-weight"]? $(".icon-bold").addClass("selected"):$(".icon-bold").removeClass("selected");
+        cellInfo["text-decoration"]? $(".icon-underline").addClass("selected"):$(".icon-underline").removeClass("selected");
+        cellInfo["font-style"]? $(".icon-italic").addClass("selected"):$(".icon-italic").removeClass("selected");
+
+        let alignment= cellInfo["text-align"];
+        $(".align-icon.selected").removeClass("selected");
+        $(".icon-align-"+alignment).addClass("selected");
+    }
+
+
+    function updateCell(property, val, defaultPossible)
     {
         $(".input-cell.selected").each(function(){
             $(this).css(property,val);
-        });
-    }
 
+            let [rowId,colId]= getRowCol(this);
+            if(!cellData[selectedSheet][rowId]) cellData[selectedSheet][rowId]={};
+            if(!cellData[selectedSheet][rowId][colId]) cellData[selectedSheet][rowId][colId]= {...defaultProperties};
+            cellData[selectedSheet][rowId][colId][property]= val;
+
+            if(defaultPossible && JSON.stringify(cellData[selectedSheet][rowId][colId]) === JSON.stringify(defaultProperties))
+            {
+                delete cellData[selectedSheet][rowId][colId];
+                if(Object.keys(cellData[selectedSheet][rowId]).length === 0) delete cellData[selectedSheet][rowId];
+            }
+        });
+
+        console.log(cellData);
+    }
+// ----------------------------------------------------------------------------
 });
 
