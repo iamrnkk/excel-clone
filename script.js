@@ -1,13 +1,14 @@
-//  ------------------ Global Parameters------------------------------------
+//  ------------------ Global Parameters ------------------------------------
 const defaultProperties= {
     text: "",
     "font-weight": "",
     "font-style":"",
     "text-decoration":"",
     "text-align": "left",
-    "background-color": "white",
-    "color": "black",
+    "background-color": "#ffffff",
+    "color": "#000000",
     "font-family": "Arial",
+    "font-size": "14px"
 };
 
 const cellData={
@@ -64,7 +65,35 @@ $(document).ready(function(){
         $(".input-cell-container").append(row);
     }
 
+    $(".font-family-selector").change(function(){
+        updateCell("font-family",$(this).val());
+        $(".font-family-selector").css("font-family",$(this).val());
+    });
+
+    $(".font-size-selector").change(function(){
+        updateCell("font-size",$(this).val());
+    });
+
     // add .selected class when selected
+    $(".style-icon").click(function(){
+        $(this).toggleClass("selected");
+    });
+
+    $(".icon-bold").click(function(){
+        if($(this).hasClass("selected")) updateCell("font-weight","bold", false);
+        else updateCell("font-weight","", true);
+    });
+
+    $(".icon-italic").click(function(){
+        if($(this).hasClass("selected")) updateCell("font-style","italic", false);
+        else updateCell("font-style","",true);
+    });
+
+    $(".icon-underline").click(function(){
+        if($(this).hasClass("selected")) updateCell("text-decoration","underline",false);
+        else updateCell("text-decoration","",true);
+    });
+
     $(".align-icon").click(function(){
 
         $(".align-icon.selected").removeClass("selected");
@@ -85,23 +114,20 @@ $(document).ready(function(){
         if($(this).hasClass("selected")) updateCell("text-align","center", false); 
     });
 
-    $(".style-icon").click(function(){
-        $(this).toggleClass("selected");
+    $(".color-fill").click(function(){
+        $(".fill-color-picker").click();
+    });
+    
+    $(".fill-color-picker").change(function(){
+        updateCell("background-color",$(this).val());
     });
 
-    $(".icon-bold").click(function(){
-        if($(this).hasClass("selected")) updateCell("font-weight","bold", false);
-        else updateCell("font-weight","", true);
+    $(".color-text").click(function(){
+        $(".text-color-picker").click();
     });
 
-    $(".icon-italic").click(function(){
-        if($(this).hasClass("selected")) updateCell("font-style","italic", false);
-        else updateCell("font-style","",true);
-    });
-
-    $(".icon-underline").click(function(){
-        if($(this).hasClass("selected")) updateCell("text-decoration","underline",false);
-        else updateCell("text-decoration","",true);
+    $(".text-color-picker").change(function(){
+        updateCell("color",$(this).val());
     });
 
     $(".input-cell").click(function(e){
@@ -169,6 +195,11 @@ $(document).ready(function(){
         $(this).focus();
     });
 
+    $(".input-cell").blur(function(){
+        updateCell("text",$(this).text());
+    });
+
+
     $(".input-cell-container").scroll(function(){
         $(".col-name-container").scrollLeft(this.scrollLeft);
         $(".row-name-container").scrollTop(this.scrollTop);
@@ -191,9 +222,12 @@ $(document).ready(function(){
         let [rowId,colId]= getRowCol(e);
 
         let cellInfo= defaultProperties;
-        if(cellData[selectedSheet][rowId] &&  cellData[selectedSheet][rowId][colId] ) 
+        if(cellData[selectedSheet][rowId] &&  cellData[selectedSheet][rowId][colId]) 
             cellInfo= cellData[selectedSheet][rowId][colId];
 
+        $(".font-family-selector").val(cellInfo["font-family"]);
+        $(".font-family-selector").css("font-family",cellInfo["font-family"]);
+        $(".font-size-selector").val(cellInfo["font-size"]);
 
         cellInfo["font-weight"]? $(".icon-bold").addClass("selected"):$(".icon-bold").removeClass("selected");
         cellInfo["text-decoration"]? $(".icon-underline").addClass("selected"):$(".icon-underline").removeClass("selected");
@@ -202,6 +236,9 @@ $(document).ready(function(){
         let alignment= cellInfo["text-align"];
         $(".align-icon.selected").removeClass("selected");
         $(".icon-align-"+alignment).addClass("selected");
+
+        $(".fill-color-picker").val(cellInfo["background-color"]);
+        $(".text-color-picker").val(cellInfo["color"]);
     }
 
 

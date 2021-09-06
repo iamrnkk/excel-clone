@@ -36,6 +36,7 @@
           <option
             style="font-family: Arial, Helvetica, sans-serif"
             value="Arial"
+            selected
           >
             Arial
           </option>
@@ -68,16 +69,16 @@
           </option>
         </select>
         <select class="selector font-size-selector">
-          <option value="10">10</option>
-          <option value="12">12</option>
-          <option value="14">14</option>
-          <option value="16">16</option>
-          <option value="18">18</option>
-          <option value="20">20</option>
-          <option value="22">22</option>
-          <option value="24">24</option>
-          <option value="26">26</option>
-          <option value="28">28</option>
+          <option value="10px">10</option>
+          <option value="12px">12</option>
+          <option value="14px" selected>14</option>
+          <option value="16px">16</option>
+          <option value="18px">18</option>
+          <option value="20px">20</option>
+          <option value="22px">22</option>
+          <option value="24px">24</option>
+          <option value="26px">26</option>
+          <option value="28px">28</option>
         </select>
         <div class="material-icons menu-icon style-icon icon-bold">format_bold</div>
         <div class="material-icons menu-icon style-icon icon-italic">format_italic</div>
@@ -85,8 +86,15 @@
         <div class="material-icons menu-icon align-icon icon-align-left selected">format_align_left</div>
         <div class="material-icons menu-icon align-icon icon-align-center">format_align_center</div>
         <div class="material-icons menu-icon align-icon icon-align-right">format_align_right</div>
-        <div class="material-icons menu-icon icon-color-fill">format_color_fill</div>
-        <div class="material-icons menu-icon icon-color-text">format_color_text</div>
+        <div class="menu-icon icon-color-fill">
+          <div class="material-icons color-fill">format_color_fill</div>
+          <input class="color-picker fill-color-picker" type="color" value="#ffffff"/>
+        </div>
+        <div class="menu-icon icon-color-text">
+          <div class="material-icons color-text">format_color_text</div>
+          <input class="color-picker text-color-picker" type="color" />
+        </div>
+        
       </div>
       <div class="formula-bar">
         <div class="formula-editor selected-cell" contenteditable="true"></div>

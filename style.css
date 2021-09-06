@@ -69,6 +69,7 @@ body{
 
 .selector{
     height: 65%;
+    outline-color: #107C41;
 }
 
 .selector option{
@@ -89,6 +90,21 @@ body{
 .menu-icon.selected{
     background-color: #dfdddb;
     color: #107C41;
+}
+.icon-color-fill,
+.icon-color-text
+{
+    position: relative;
+}
+.color-picker{
+    position: absolute;
+    border: none;
+    height: 14px;
+    width: 33px;
+    top: 21px;
+    background: none;
+    left: 6px;
+    cursor: pointer;
 }
 /* ----------------------------------------------- */
 
@@ -201,6 +217,8 @@ body{
     padding-top: 0.4rem;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .input-cell.selected{
