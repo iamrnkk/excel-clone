@@ -219,6 +219,7 @@ body{
     padding-right: 0.3rem;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
 }
 
 .input-cell.selected{
@@ -247,7 +248,7 @@ body{
     height: 4vh;
     display: flex;
     align-items: center;
-    background-color: #dfdddb;
+    background-color: #F3F2F1;
 }
 
 .scroller{
@@ -283,20 +284,28 @@ body{
     display: flex;
     align-items: center;
     height: 100%;
-    
+    border-left: 1px solid #a8a6a3;
 }
 
 .sheet-tab{
    padding-left: 15px;
    font-weight: 600;
    width: 70px;
-   border: 1px solid #a8a6a3;
+   border-right: 1px solid #a8a6a3;
    height: 100%;
    display: flex;
    align-items: center;
-   border-bottom: 4.5px solid #107C41;
+   
 }
 
 .sheet-tab:hover{
+    cursor: pointer;
+    background-color: #dfdddb;
+    color: #107C41;
+}
+
+.sheet-tab.selected{
+    border-bottom: 4.5px solid #107C41;
+    background-color: #F3F2F1;
     cursor: default;
 }
