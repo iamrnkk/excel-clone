@@ -10,6 +10,7 @@ body{
 
 .container{
     height: 100vh;
+    position: relative;
 }
 
 /* ------------ Title-Bar ---------------------- */
@@ -295,7 +296,7 @@ body{
    height: 100%;
    display: flex;
    align-items: center;
-   
+   overflow: hidden;
 }
 
 .sheet-tab:hover{
@@ -309,3 +310,73 @@ body{
     background-color: #F3F2F1;
     cursor: default;
 }
+
+/* ------------------------ Modals -------------------------------*/
+
+.sheet-options-modal{
+    position: absolute;
+    bottom: 4vh;
+    height: 60px;
+    width: 60px;
+    left: 50px;
+    background-color: #F3F2F1;
+    box-shadow: 1px 1px 4px 0px #52504f;
+}
+
+.sheet-option{
+    height: 30px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.sheet-option:hover{
+    background-color: #dfdddb;
+    color: #107C41;
+    cursor: pointer;
+}
+.sheet-rename{
+    border-bottom:2px solid #dfdddb;
+}
+
+.sheet-rename-modal{
+    position: absolute;
+    height: 25%;
+    width: 25%;
+    top: calc(100vh/2 - 15%);
+    left: calc(100vw/2 - 15%);
+    background-color: #F3F2F1;
+    box-shadow: 1px 1px 5px 1px #52504f;
+    text-align: center;
+    min-width: 200px;
+    min-height: 200px;
+    padding: 0.3%;
+}
+
+.new-sheet-name{
+    width:60%;
+    height: 20%;
+    outline-color: #0b572d;
+}
+
+.action-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 5%;
+    height: 20%;
+}
+
+.action-button{
+    width: 60px;
+    background-color: #107C41;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset -1px 0px 1px 1px #0a562d;
+}
+
+.action-button:hover{
+    background-color: #0b572d;
+    cursor: pointer;
+}
+

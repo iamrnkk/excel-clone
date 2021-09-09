@@ -15,6 +15,10 @@ const cellData={
     "Sheet1": {}
 };
 
+const sheetNames={
+    "Sheet1": "Sheet1"
+};
+
 let selectedSheet= "Sheet1";
 let totalSheets= 1;
 let currentSheet=1;
@@ -212,19 +216,78 @@ $(document).ready(function(){
         currentSheet+=1;
         selectedSheet= "Sheet"+currentSheet;
         cellData[selectedSheet]={};
-        $(".sheet-tab-container").prepend(`<div class="sheet-tab selected">${selectedSheet}</div>`);
-        $(".sheet-tab.selected").click(function(){
-            if(!$(this).hasClass("selected")) switchSheet(this);
-        });
+        sheetNames[selectedSheet]=selectedSheet;
+        $(".sheet-tab-container").prepend(`<div class="sheet-tab selected" name=${selectedSheet}>${selectedSheet}</div>`);
+        addSheetEvents();
     });
 
-    $(".sheet-tab").click(function(){
-        if(!$(this).hasClass("selected")) switchSheet(this);
+    addSheetEvents();
+
+    $(".container").click(function(){
+        if($(".sheet-options-modal").length==1) $(".sheet-options-modal").remove();
+        else $(".sheet-rename-modal").remove();
     });
 
 });
 
 // ------------------------ Functions section ---------------------------------
+
+function addSheetEvents()
+{
+    $(".sheet-tab.selected").click(function(){
+        if(!$(this).hasClass("selected")) switchSheet(this);
+    });
+
+    $(".sheet-tab.selected").contextmenu(function(e){
+        e.preventDefault();
+        switchSheet(this);
+        if($(".sheet-options-modal").length==0)
+        {
+            $(".container").append(`<div class="modal sheet-options-modal">
+                                        <div class="sheet-option sheet-rename">Rename</div>
+                                        <div class="sheet-option sheet-delete">Delete</div>
+                                    </div>`);
+
+            $(".sheet-rename").click(function()
+            {
+                if($(".sheet-rename-modal").length==0)
+                {
+                    $(".container").append(`<div class="modal sheet-rename-modal">
+                                                <h3>Rename Sheet To:</h3>
+                                                <input type="text"  class="new-sheet-name" placeholder="Sheet Name">
+                                                <div class="action-buttons">
+                                                    <div class="action-button submit-button">Submit</div>
+                                                    <div class="action-button cancel-button">Cancel</div>
+                                                </div>
+                                            </div>`);
+                    
+                    $(".sheet-rename-modal").click(function(e){
+                        e.stopPropagation();
+                    });
+
+                    $(".cancel-button").click(function(){
+                        $(".sheet-rename-modal").remove();
+                    });
+
+                    $(".submit-button").click(function(){
+                        let newSheetName= $(".new-sheet-name").val();
+                        let oldSheetName= $(".sheet-tab.selected").text();
+                        delete sheetNames[oldSheetName];
+                        sheetNames[newSheetName]= $(".sheet-tab.selected").attr("name");
+                        selectedSheet=sheetNames[newSheetName];
+                        $(".sheet-tab.selected").text(newSheetName);
+                        $(".sheet-rename-modal").remove();
+                    });
+                }
+            });
+            
+        }
+        
+        $(".sheet-options-modal").css("left",e.pageX+"px");
+    });
+
+    
+}
 
 function getRowCol(e)
 {
@@ -321,7 +384,7 @@ function switchSheet(e)
     $(".sheet-tab.selected").removeClass("selected");
     $(e).addClass("selected");
     emptySheet();
-    selectedSheet= $(e).text();
+    selectedSheet= $(e).attr("name");
     loadSheet();
 }
 // ----------------------------------------------------------------------------
