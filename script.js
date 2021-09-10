@@ -21,7 +21,7 @@ const sheetNames={
 
 let selectedSheet= "Sheet1";
 let totalSheets= 1;
-let currentSheet=1;
+let currentSheetNo=1;
 // ----------------------------------------------------------------------------
 
 $(document).ready(function(){
@@ -213,8 +213,8 @@ $(document).ready(function(){
         emptySheet();
         $(".sheet-tab.selected").removeClass("selected");
         totalSheets+= 1;
-        currentSheet+=1;
-        selectedSheet= "Sheet"+currentSheet;
+        currentSheetNo+=1;
+        selectedSheet= "Sheet"+currentSheetNo;
         cellData[selectedSheet]={};
         sheetNames[selectedSheet]=selectedSheet;
         $(".sheet-tab-container").prepend(`<div class="sheet-tab selected" name=${selectedSheet}>${selectedSheet}</div>`);
@@ -261,8 +261,8 @@ function addSheetEvents()
                                                 </div>
                                             </div>`);
                     
-                    $(".sheet-rename-modal").click(function(e){
-                        e.stopPropagation();
+                    $(".sheet-rename-modal").click(function(event){
+                        event.stopPropagation();
                     });
 
                     $(".cancel-button").click(function(){
@@ -279,6 +279,26 @@ function addSheetEvents()
                         $(".sheet-rename-modal").remove();
                     });
                 }
+            });
+
+            $(".sheet-delete").click(function(){
+                if(Object.keys(cellData).length>1)
+                {
+                 let deletedSheet=$(".sheet-tab.selected");
+                 let deletedSheetName= selectedSheet;
+                 let deletedSheetIndex = Object.keys(cellData).indexOf(deletedSheetName);
+                 
+                 if(deletedSheetIndex==0) $(".sheet-tab.selected").prev().click();
+                 else  $(".sheet-tab.selected").next().click();
+                 
+                 delete sheetNames[deletedSheet.text()];
+                 delete cellData[deletedSheetName];
+                 deletedSheet.remove();
+                 totalSheets-=1;
+                 selectedSheet=  $(".sheet-tab.selected").attr("name");
+                 console.log(selectedSheet);
+                }
+                else alert("Sorry, there is only one sheet. It cannot be deleted");
             });
             
         }
