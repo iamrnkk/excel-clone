@@ -63,11 +63,16 @@ $(document).ready(function(){
         {
             let colNo= $(`.col-id-${j}`).attr("id");
             let cell=$(`<div class="input-cell"  id="row-${i}-col-${j}" cell-address="${colNo}${i}" contenteditable=false></div>`);
+            $(cell).click(function(){
+                $(".selected-cell").text($(this).attr("cell-address"));
+            });
             row.append(cell);
         }
 
         $(".input-cell-container").append(row);
     }
+
+    cutCopyPaste();
 
     $(".font-family-selector").change(function(){
         updateCell("font-family",$(this).val());
@@ -223,6 +228,15 @@ $(document).ready(function(){
 
     addSheetEvents();
 
+    $(".icon-scroll-left").click(function(){
+        $(".sheet-tab.selected").prev(".sheet-tab").click();
+        $(".sheet-tab.selected")[0].scrollIntoView();
+    });
+
+    $(".icon-scroll-right").click(function(){
+        $(".sheet-tab.selected").next(".sheet-tab").click();
+        $(".sheet-tab.selected")[0].scrollIntoView();
+    });
     $(".container").click(function(){
         if($(".sheet-options-modal").length==1) $(".sheet-options-modal").remove();
         else $(".sheet-rename-modal").remove();
@@ -305,7 +319,6 @@ function addSheetEvents()
         
         $(".sheet-options-modal").css("left",e.pageX+"px");
     });
-
     
 }
 
@@ -342,6 +355,68 @@ function changeHeader(e)
     $(".text-color-picker").val(cellInfo["color"]);
 }
 
+function cutCopyPaste()
+{
+    let selectedCells = [];
+    let cut = false;
+
+    $(".icon-copy").click(function() {
+        
+        selectedCells = [];
+        $(".input-cell.selected").each(function() {
+            selectedCells.push(getRowCol(this));
+        });
+        cut=false;
+        
+        $(".icon-cut").removeClass("selected");
+        $(".icon-copy").addClass("selected");
+    });
+
+    $(".icon-cut").click(function() {
+        selectedCells = [];
+        $(".input-cell.selected").each(function() {
+            selectedCells.push(getRowCol(this));
+        });
+        cut = true;
+        
+        $(".icon-copy").removeClass("selected");
+        $(".icon-cut").addClass("selected");
+    })
+
+    $(".icon-paste").click(function() {
+        if(selectedCells.length==0) return;
+        emptySheet();
+        let [rowId,colId] = getRowCol($(".input-cell.selected")[0]);
+        let rowDistance = rowId - selectedCells[0][0];
+        let colDistance = colId - selectedCells[0][1];
+        for(let cell of selectedCells) {
+            let newRowId = cell[0] + rowDistance;
+            let newColId = cell[1] + colDistance;
+            
+            if(cellData[selectedSheet][cell[0]][cell[1]])
+            {
+                if(!cellData[selectedSheet][newRowId]) cellData[selectedSheet][newRowId] = {};
+                cellData[selectedSheet][newRowId][newColId] = {...cellData[selectedSheet][cell[0]][cell[1]]};
+            }
+
+            if(cut) 
+            {
+                delete cellData[selectedSheet][cell[0]][cell[1]];
+                if(Object.keys(cellData[selectedSheet][cell[0]]).length == 0)
+                    delete cellData[selectedSheet][cell[0]];
+            }
+        }
+        if(cut) {
+            cut = false;
+            selectedCells = [];
+        }
+        
+        changeHeader($(".input-cell.selected")[0]);
+        loadSheet();
+        $(".icon-copy").removeClass("selected");
+        $(".icon-cut").removeClass("selected");
+    });
+}
 
 function updateCell(property, val, defaultPossible)
 {
@@ -406,6 +481,7 @@ function switchSheet(e)
     emptySheet();
     selectedSheet= $(e).attr("name");
     loadSheet();
+    $(".sheet-tab.selected")[0].scrollIntoView();
 }
 // ----------------------------------------------------------------------------
 
