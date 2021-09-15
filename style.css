@@ -228,6 +228,7 @@ body{
 
 .input-cell.selected{
     border: 3px solid #107C41;
+    background-color: #F3F3F3;
 }
 
 .input-cell.top-cell-selected{
