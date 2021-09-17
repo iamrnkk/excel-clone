@@ -151,6 +151,15 @@ $(document).ready(function(){
         updateCell("color",$(this).val());
     });
 
+    $(".formula-input").keydown(function(e){
+        removeMultipleSelect();
+        if($(".formula-input").text() != "" && e.which==13)
+        {
+            updateCellUsingFormula(this);
+            $(".formula-input").blur();
+        }
+    });
+
     $(".input-cell").click(function(e){
         // multiple select
         if(e.ctrlKey)
@@ -196,11 +205,7 @@ $(document).ready(function(){
         }
         else
         {
-            $(".input-cell.top-cell-selected").removeClass("top-cell-selected");
-            $(".input-cell.right-cell-selected").removeClass("right-cell-selected");
-            $(".input-cell.bottom-cell-selected").removeClass("bottom-cell-selected");
-            $(".input-cell.left-cell-selected").removeClass("left-cell-selected");
-
+            removeMultipleSelect();
             $(".input-cell.selected").removeClass("selected");
             $(".input-cell[contenteditable=true]").attr("contenteditable","false");
         }
@@ -209,12 +214,9 @@ $(document).ready(function(){
         changeHeader(this);
     });
 
-    $(".input-cell").dblclick(function(){
-        $(".input-cell.top-cell-selected").removeClass("top-cell-selected");
-        $(".input-cell.right-cell-selected").removeClass("right-cell-selected");
-        $(".input-cell.bottom-cell-selected").removeClass("bottom-cell-selected");
-        $(".input-cell.left-cell-selected").removeClass("left-cell-selected");
-
+    $(".input-cell").dblclick(function()
+    {
+        removeMultipleSelect();
         $(".input-cell.selected").removeClass("selected");
         $(this).addClass("selected");
         $(this).attr("contenteditable","true");
@@ -223,10 +225,8 @@ $(document).ready(function(){
 
     $(".input-cell").blur(function(){
         updateCell("text",$(this).text());
-        
         updateCellDirectly(this);
     });
-
 
     $(".input-cell-container").scroll(function(){
         $(".col-name-container").scrollLeft(this.scrollLeft);
@@ -351,13 +351,26 @@ function getRowCol(e)
     return [rowId,colId];
 }
 
+function removeMultipleSelect()
+{
+    $(".input-cell.top-cell-selected").removeClass("top-cell-selected");
+    $(".input-cell.right-cell-selected").removeClass("right-cell-selected");
+    $(".input-cell.bottom-cell-selected").removeClass("bottom-cell-selected");
+    $(".input-cell.left-cell-selected").removeClass("left-cell-selected");
+}
+
 function changeHeader(e)
 {
+    console.log($(this).attr("cell-address"));
     let [rowId,colId]= getRowCol(e);
-
+    let formula =formulaData[$(e).attr("cell-address")].formula;
+    
     let cellInfo= defaultProperties;
     if(cellData[selectedSheet][rowId] &&  cellData[selectedSheet][rowId][colId]) 
         cellInfo= cellData[selectedSheet][rowId][colId];
+    
+    if(formula) $(".formula-input").text(formula);
+    else $(".formula-input").text("");
 
     $(".font-family-selector").val(cellInfo["font-family"]);
     $(".font-family-selector").css("font-family",cellInfo["font-family"]);
@@ -387,7 +400,6 @@ function cutCopyPaste()
             selectedCells.push(getRowCol(this));
         });
         cut=false;
-        console.log(selectedCells);
         $(".icon-cut").removeClass("selected");
         $(".icon-copy").addClass("selected");
     });
@@ -398,7 +410,6 @@ function cutCopyPaste()
             selectedCells.push(getRowCol(this));
         });
         cut = true;
-        console.log(selectedCells);
         $(".icon-copy").removeClass("selected");
         $(".icon-cut").addClass("selected");
     })
@@ -406,7 +417,6 @@ function cutCopyPaste()
     $(".icon-paste").click(function() {
         if(selectedCells.length==0) return;
         emptySheet();
-        console.log(selectedCells);
         let [rowId,colId] = getRowCol($(".input-cell.selected")[0]);
         let rowDistance = rowId - selectedCells[0][0];
         let colDistance = colId - selectedCells[0][1];
@@ -443,7 +453,6 @@ function updateCell(property, val, defaultPossible)
 {
     $(".input-cell.selected").each(function(){
         $(this).css(property,val);
-
         let [rowId,colId]= getRowCol(this);
         if(!cellData[selectedSheet][rowId]) cellData[selectedSheet][rowId]={};
         if(!cellData[selectedSheet][rowId][colId]) cellData[selectedSheet][rowId][colId]= {...defaultProperties};
@@ -504,10 +513,23 @@ function switchSheet(e)
     $(".sheet-tab.selected")[0].scrollIntoView();
 }
 
+function cycleFound(currCellAddress, childCellAddress)
+{
+    let currCellObj= formulaData[currCellAddress];
+    if(currCellObj.upstream.includes(childCellAddress)) return true;
+    return false;
+}
+
+function isCharacterInvalid(char) {
+    return /^[a-zA-Z]+$/.test(char) || !isNaN(char.charAt(0));
+}
+
 function updateCellDirectly(e)
 {
     let currCellAddress=$(e).attr("cell-address");
     let currCellObj= formulaData[currCellAddress];
+    
+    if(currCellObj.value==$(e).text()) return;
     
     currCellObj.value= $(e).text();
     currCellObj.formula= undefined;
@@ -521,9 +543,74 @@ function updateCellDirectly(e)
         updateChildren(childCellAddress);
 
     formulaData[currCellAddress]=currCellObj;
+    
     emptySheet();
     loadSheet();
 
+}
+
+function updateCellUsingFormula(e)
+{
+    if(!$(".input-cell.selected"))
+    {
+        alert("No Cell Selected!");
+        return;
+    }
+
+    try {
+        eval($(e).text().replace(/[^\W]|_/g, '1'));
+    } catch (error) {
+        console.log(error);
+        console.log($(e).text());
+        console.log($(e).text().replace(/[^\W]|_/g, '1'));
+        alert("Invalid formula!");
+        return;
+    }
+
+    let currCellAddress=$(".input-cell.selected").attr("cell-address");
+    let currCellObj= formulaData[currCellAddress];
+
+    let expressionArray=$(e).text().split(/[^\w]|_/g);
+    let formulaArray=[];
+
+    for (const token of expressionArray)
+    {
+        if(!isNaN(token)) continue;
+        else if(isCharacterInvalid(token))
+        {
+            alert("Invalid Cell Addresses!");
+            return;
+        }
+        else formulaArray.push(token);
+    } 
+
+    for (const parentCellAddress of formulaArray)
+    {
+        if(cycleFound(parentCellAddress,currCellAddress))
+        {
+            alert("Invalid Formula, Cycle Detected!");
+            return;
+        }
+    }
+
+    currCellObj.formula= $(e).text();
+    for (const parentCellAddress of currCellObj.upstream)
+        removeFromDownstream(parentCellAddress,currCellAddress);
+    
+    currCellObj.upstream=formulaArray;
+    
+    for (const parentCellAddress of currCellObj.upstream)
+        addToDownstream(parentCellAddress,currCellAddress);
+    updateChildren(currCellAddress);
+
+    formulaData[currCellAddress]=currCellObj;
+    emptySheet();
+    loadSheet();
+}
+
+function addToDownstream(parentCellAddress, childCellAddress)
+{
+    formulaData[parentCellAddress].downstream.push(childCellAddress);
 }
 
 function removeFromDownstream(parentCellAddress, childCellAddress)
@@ -539,16 +626,27 @@ function updateChildren(cellAddress)
     let cellObj= formulaData[cellAddress];
     let formula= cellObj.formula;
 
+    let parentHasValue= true;
     for (const parentCellAddress of cellObj.upstream)
-       formula= formula.replace(parentCellAddress,formulaData[parentCellAddress].value);
-    
-    formulaData[cellAddress].value= eval(formula);
+    {
+        if(!formulaData[parentCellAddress].value)
+        {
+            parentHasValue= false;
+            break;
+        }
+        formula= formula.replace(parentCellAddress,formulaData[parentCellAddress].value);
+    }
+    if(parentHasValue){
+        formulaData[cellAddress].value= eval(formula);
 
-    let [rowId, colId] =getRowCol($(`[cell-address= ${cellAddress}`));
-    cellData[selectedSheet][rowId][colId].text= formulaData[cellAddress].value;
-    
+        let [rowId, colId] =getRowCol($(`[cell-address= ${cellAddress}`));
+        
+        if(!cellData[selectedSheet][rowId]) cellData[selectedSheet][rowId]={};
+        if(!cellData[selectedSheet][rowId][colId]) cellData[selectedSheet][rowId][colId]= {...defaultProperties};
+        cellData[selectedSheet][rowId][colId]["text"]= formulaData[cellAddress].value;
+    }
     for (const childCellAddress of cellObj.downstream)
-        updateChildren(childCellAddress);
+        if(childCellAddress!=cellAddress )updateChildren(childCellAddress);
     
 }
 // ----------------------------------------------------------------------------
