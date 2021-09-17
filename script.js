@@ -19,7 +19,14 @@ const sheetNames={
     "Sheet1": "Sheet1"
 };
 
-const formulaData={};
+const formulaData={"Sheet1":{}};
+const formulaSchema={};
+const formulaProperties={
+    value: undefined,
+    formula: undefined,
+    upstream:[],
+    downstream:[]
+};
 
 let selectedSheet= "Sheet1";
 let totalSheets= 1;
@@ -65,12 +72,7 @@ $(document).ready(function(){
         {
             let colNo= $(`.col-id-${j}`).attr("id");
             let cell=$(`<div class="input-cell"  id="row-${i}-col-${j}" cell-address="${colNo}${i}" contenteditable=false></div>`);
-            formulaData[cell.attr("cell-address")]={
-                value: undefined,
-                formula: undefined,
-                upstream:[],
-                downstream:[]
-            };
+            formulaSchema[cell.attr("cell-address")]={...formulaProperties};
             $(cell).click(function(){
                 $(".selected-cell").text($(this).attr("cell-address"));
             });
@@ -80,9 +82,7 @@ $(document).ready(function(){
         $(".input-cell-container").append(row);
     }
 
-    // formulaData["A1"].downstream=["B1"];
-    // formulaData["B1"].upstream=["A1"];
-    // formulaData["B1"].formula= "2*A1";
+    formulaData["Sheet1"]= JSON.parse(JSON.stringify(formulaSchema));
     
     cutCopyPaste();
 
@@ -153,6 +153,9 @@ $(document).ready(function(){
 
     $(".formula-input").keydown(function(e){
         removeMultipleSelect();
+        $(".input-cell.selected").removeClass("selected");
+        $(".input-cell.last-selected").addClass("selected");
+        
         if($(".formula-input").text() != "" && e.which==13)
         {
             updateCellUsingFormula(this);
@@ -171,7 +174,8 @@ $(document).ready(function(){
                 let topCellSelected= $(`#row-${rowId-1}-col-${colId}`).hasClass("selected");
                 if(topCellSelected)
                 { 
-                    $(this).addClass("top-cell-selected");
+                    $(".input-cell.last-selected").removeClass("last-selected");
+                    $(this).addClass("top-cell-selected last-selected");
                     $(`#row-${rowId-1}-col-${colId}`).addClass("bottom-cell-selected");
                 }
             }
@@ -180,7 +184,8 @@ $(document).ready(function(){
                 let rightCellSelected= $(`#row-${rowId}-col-${colId+1}`).hasClass("selected");
                 if(rightCellSelected)
                 { 
-                    $(this).addClass("right-cell-selected");
+                    $(".input-cell.last-selected").removeClass("last-selected");
+                    $(this).addClass("right-cell-selected last-selected");
                     $(`#row-${rowId}-col-${colId+1}`).addClass("left-cell-selected");
                 }
             }
@@ -189,7 +194,8 @@ $(document).ready(function(){
                 let bottomCellSelected= $(`#row-${rowId+1}-col-${colId}`).hasClass("selected");
                 if(bottomCellSelected)
                 { 
-                    $(this).addClass("bottom-cell-selected");
+                    $(".input-cell.last-selected").removeClass("last-selected");
+                    $(this).addClass("bottom-cell-selected last-selected");
                     $(`#row-${rowId+1}-col-${colId}`).addClass("top-cell-selected");
                 }
             }
@@ -198,7 +204,8 @@ $(document).ready(function(){
                 let leftCellSelected= $(`#row-${rowId}-col-${colId-1}`).hasClass("selected");
                 if(leftCellSelected)
                 { 
-                    $(this).addClass("left-cell-selected");
+                    $(".input-cell.last-selected").removeClass("last-selected");
+                    $(this).addClass("left-cell-selected last-selected");
                     $(`#row-${rowId}-col-${colId-1}`).addClass("right-cell-selected");
                 }
             }
@@ -206,7 +213,10 @@ $(document).ready(function(){
         else
         {
             removeMultipleSelect();
+            $(".input-cell.last-selected").removeClass("last-selected");
             $(".input-cell.selected").removeClass("selected");
+            $(".input-cell.last-selected").removeClass("last-selected");
+            $(this).addClass("last-selected");
             $(".input-cell[contenteditable=true]").attr("contenteditable","false");
         }
         $(this).addClass("selected");
@@ -217,8 +227,9 @@ $(document).ready(function(){
     $(".input-cell").dblclick(function()
     {
         removeMultipleSelect();
+        $(".input-cell.last-selected").removeClass("last-selected");
         $(".input-cell.selected").removeClass("selected");
-        $(this).addClass("selected");
+        $(this).addClass("selected last-selected");
         $(this).attr("contenteditable","true");
         $(this).focus();
     });
@@ -240,6 +251,7 @@ $(document).ready(function(){
         currentSheetNo+=1;
         selectedSheet= "Sheet"+currentSheetNo;
         cellData[selectedSheet]={};
+        formulaData[selectedSheet]=JSON.parse(JSON.stringify(formulaSchema));
         sheetNames[selectedSheet]=selectedSheet;
         $(".sheet-tab-container").prepend(`<div class="sheet-tab selected" name=${selectedSheet}>${selectedSheet}</div>`);
         addSheetEvents();
@@ -327,6 +339,7 @@ function addSheetEvents()
                  
                  delete sheetNames[deletedSheet.text()];
                  delete cellData[deletedSheetName];
+                 delete formulaData[deletedSheetName];
                  deletedSheet.remove();
                  totalSheets-=1;
                  selectedSheet=  $(".sheet-tab.selected").attr("name");
@@ -361,9 +374,8 @@ function removeMultipleSelect()
 
 function changeHeader(e)
 {
-    console.log($(this).attr("cell-address"));
     let [rowId,colId]= getRowCol(e);
-    let formula =formulaData[$(e).attr("cell-address")].formula;
+    let formula =formulaData[selectedSheet][$(e).attr("cell-address")].formula;
     
     let cellInfo= defaultProperties;
     if(cellData[selectedSheet][rowId] &&  cellData[selectedSheet][rowId][colId]) 
@@ -470,8 +482,11 @@ function updateCell(property, val, defaultPossible)
 
 function emptySheet()
 {
+    removeMultipleSelect();
+    $(".input-cell.selected").removeClass("selected");
+    $(".input-cell.last-selected").addClass("selected");
     let sheetInfo= cellData[selectedSheet];
-
+    $(".formula-input").text("");
     for(let rowId of Object.keys(sheetInfo))
     {
         for(let colId of Object.keys(sheetInfo[rowId]))
@@ -487,8 +502,12 @@ function emptySheet()
 
 function loadSheet()
 {
+    if($(".input-cell.selected").length != 0){
+        let currFormula=formulaData[selectedSheet][$(".input-cell.selected").attr("cell-address")].formula;
+        $(".formula-input").text("");
+        if(currFormula) $(".formula-input").text(currFormula);
+    }
     let sheetInfo= cellData[selectedSheet];
-
     for(let rowId of Object.keys(sheetInfo))
     {
         for(let colId of Object.keys(sheetInfo[rowId]))
@@ -515,7 +534,7 @@ function switchSheet(e)
 
 function cycleFound(currCellAddress, childCellAddress)
 {
-    let currCellObj= formulaData[currCellAddress];
+    let currCellObj= formulaData[selectedSheet][currCellAddress];
     if(currCellObj.upstream.includes(childCellAddress)) return true;
     return false;
 }
@@ -527,7 +546,8 @@ function isCharacterInvalid(char) {
 function updateCellDirectly(e)
 {
     let currCellAddress=$(e).attr("cell-address");
-    let currCellObj= formulaData[currCellAddress];
+    if(!formulaData[selectedSheet][currCellAddress]) formulaData[selectedSheet]=JSON.parse(JSON.stringify(formulaSchema));
+    let currCellObj= formulaData[selectedSheet][currCellAddress];
     
     if(currCellObj.value==$(e).text()) return;
     
@@ -542,7 +562,7 @@ function updateCellDirectly(e)
     for (const childCellAddress of currCellObj.downstream)
         updateChildren(childCellAddress);
 
-    formulaData[currCellAddress]=currCellObj;
+    formulaData[selectedSheet][currCellAddress]=currCellObj;
     
     emptySheet();
     loadSheet();
@@ -568,7 +588,8 @@ function updateCellUsingFormula(e)
     }
 
     let currCellAddress=$(".input-cell.selected").attr("cell-address");
-    let currCellObj= formulaData[currCellAddress];
+    if(!formulaData[selectedSheet][currCellAddress]) formulaData[selectedSheet]=JSON.parse(JSON.stringify(formulaSchema));
+    let currCellObj= formulaData[selectedSheet][currCellAddress];
 
     let expressionArray=$(e).text().split(/[^\w]|_/g);
     let formulaArray=[];
@@ -603,47 +624,47 @@ function updateCellUsingFormula(e)
         addToDownstream(parentCellAddress,currCellAddress);
     updateChildren(currCellAddress);
 
-    formulaData[currCellAddress]=currCellObj;
+    formulaData[selectedSheet][currCellAddress]=currCellObj;
     emptySheet();
     loadSheet();
 }
 
 function addToDownstream(parentCellAddress, childCellAddress)
 {
-    formulaData[parentCellAddress].downstream.push(childCellAddress);
+    formulaData[selectedSheet][parentCellAddress].downstream.push(childCellAddress);
 }
 
 function removeFromDownstream(parentCellAddress, childCellAddress)
 {
-    let parentDownstream= formulaData[parentCellAddress].downstream;
+    let parentDownstream= formulaData[selectedSheet][parentCellAddress].downstream;
     let index=parentDownstream.indexOf(childCellAddress);
     parentDownstream.splice(index,1);
-    formulaData[parentCellAddress].downstream= parentDownstream;
+    formulaData[selectedSheet][parentCellAddress].downstream= parentDownstream;
 }
 
 function updateChildren(cellAddress)
 {
-    let cellObj= formulaData[cellAddress];
+    let cellObj= formulaData[selectedSheet][cellAddress];
     let formula= cellObj.formula;
 
     let parentHasValue= true;
     for (const parentCellAddress of cellObj.upstream)
     {
-        if(!formulaData[parentCellAddress].value)
+        if(!formulaData[selectedSheet][parentCellAddress].value)
         {
             parentHasValue= false;
             break;
         }
-        formula= formula.replace(parentCellAddress,formulaData[parentCellAddress].value);
+        formula= formula.replace(parentCellAddress,formulaData[selectedSheet][parentCellAddress].value);
     }
     if(parentHasValue){
-        formulaData[cellAddress].value= eval(formula);
+        formulaData[selectedSheet][cellAddress].value= eval(formula);
 
         let [rowId, colId] =getRowCol($(`[cell-address= ${cellAddress}`));
         
         if(!cellData[selectedSheet][rowId]) cellData[selectedSheet][rowId]={};
         if(!cellData[selectedSheet][rowId][colId]) cellData[selectedSheet][rowId][colId]= {...defaultProperties};
-        cellData[selectedSheet][rowId][colId]["text"]= formulaData[cellAddress].value;
+        cellData[selectedSheet][rowId][colId]["text"]= formulaData[selectedSheet][cellAddress].value;
     }
     for (const childCellAddress of cellObj.downstream)
         if(childCellAddress!=cellAddress )updateChildren(childCellAddress);
