@@ -31,6 +31,7 @@ const formulaProperties={
 let selectedSheet= "Sheet1";
 let totalSheets= 1;
 let currentSheetNo=1;
+
 // ----------------------------------------------------------------------------
 
 $(document).ready(function(){
@@ -84,6 +85,11 @@ $(document).ready(function(){
 
     formulaData["Sheet1"]= JSON.parse(JSON.stringify(formulaSchema));
     
+    $(".menu-help").click(function(e){
+        e.stopPropagation();
+        openHelpModal();
+    });
+
     cutCopyPaste();
 
     $(".font-family-selector").change(function(){
@@ -269,15 +275,42 @@ $(document).ready(function(){
         $(".sheet-tab.selected")[0].scrollIntoView();
     });
 
-    $(".container").click(function(){
+    $(".container").click(function(e){
+        if($(".help-modal").length==1) $(".help-modal").remove();
         if($(".sheet-options-modal").length==1) $(".sheet-options-modal").remove();
         else $(".sheet-rename-modal").remove();
+        
     });
 
 });
 
 // ------------------------ Functions section ---------------------------------
 
+function openHelpModal(){
+    $(".container").append(`<div class="modal help-modal">
+                                <div class="modal-header">Help</div>
+                                <div class="modal-body">
+                                <ul>
+                                    <li><strong>Welcome to Excel Clone.</strong></li>
+                                    <li><span>Basic: </span>Type numbers or text in Cells.</li>
+                                    <li><span>Formatting: </span>Apply formatting by Selecting the cells and picking up formatting options from Menu Icon Bar.</li>
+                                    <li><span>Multiple Select: </span>Select multiple Cells by pressing and holding ctrl key.</li>
+                                    <li><span>Add Sheets: </span>Add more Sheets by clicking on + in Sheet Bar.</li>
+                                    <li><span>Rename/Delete Sheets: </span>Right click on sheet to do the needful.</li>
+                                    <li><span>Formula: </span>Calculate Basic mathematical operations on cell By typing formula in Formula Bar. format: (2*A1 + 3/B1) where A1 and B1 are cell-addresses. </li>
+                                </ul>
+                                </div>
+                                <div class="modal-footer"><div class="action-button ok-button">Ok</div></div>
+                            </div>`);
+    
+        $(".help-modal").click(function(event){
+            event.stopPropagation();
+        });
+        $(".ok-button").click(function(){
+            $(".help-modal").remove();
+        });
+    
+}
 function addSheetEvents()
 {
     $(".sheet-tab.selected").click(function(){

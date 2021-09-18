@@ -80,6 +80,7 @@ body{
 .font-family-selector
 {
     margin-left: 10px;
+    width: 10rem;
 }
 .font-size-selector{
     margin-right: 10px;
@@ -168,7 +169,7 @@ body{
 .col-name-container{
     height: 30px;
     width: calc(100vw - 30px);
-    border: 1px solid #a8a6a3;
+    border-top: 1px solid #a8a6a3;
     background-color: #F3F2F1;
     display: flex;
     overflow: hidden;
@@ -179,13 +180,13 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 2px solid #a8a6a3;
+    border-right: 1px solid #a8a6a3;
     font-weight: bold;
 }
 .row-name-container{
     height: calc(74.8vh - 30px);
-    width: 30px;
-    border: 1px solid #a8a6a3;
+    width: 29.5px;
+    border-bottom: 1px solid #a8a6a3;
     background-color: #F3F2F1;
     overflow: hidden;
 }
@@ -196,7 +197,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 2px solid #a8a6a3;
+    border-bottom: 1px solid #a8a6a3;
     font-weight: bold;
 }
 
@@ -215,8 +216,8 @@ body{
 {
     min-width: 100px;
     min-height: 30px;
-    border-bottom: 2px solid #a8a6a3;
-    border-right: 2px solid #a8a6a3;
+    border-bottom: 1px solid #a8a6a3;
+    border-right: 1px solid #a8a6a3;
     outline: 0;
     padding-top: 0.4rem;
     padding-left: 0.3rem;
@@ -228,7 +229,7 @@ body{
 
 .input-cell.selected{
     border: 3px solid #107C41;
-    background-color: #F3F3F3;
+    background-color: #F3F3F3 !important;
 }
 
 .input-cell.top-cell-selected{
@@ -236,11 +237,11 @@ body{
 }
 
 .input-cell.bottom-cell-selected{
-    border-bottom: 2px solid #a8a6a3;
+    border-bottom: 1px solid #a8a6a3;
 }
 
 .input-cell.right-cell-selected{
-    border-right: 2px solid #a8a6a3;;
+    border-right: 1px solid #a8a6a3;;
 }
 
 .input-cell.left-cell-selected{
@@ -318,6 +319,73 @@ body{
 
 /* ------------------------ Modals -------------------------------*/
 
+.help-modal
+{
+    position: absolute;
+    height: 60%;
+    width: 45%;
+    top: calc(100vh/2 - 25%);
+    left: calc(100vw/2 - 25%);
+    background-color: #F3F2F1;
+    box-shadow: 0px 1px 8px 1px #52504f;
+    min-width: 200px;
+    min-height: 200px;
+    color: #52504f; 
+    
+}
+.modal-header
+{
+    height: 15%;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid #a8a6a3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body
+{
+    height:70%;
+    overflow: auto;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+ul {
+    list-style: none;
+    
+  }
+  
+ul li::before {
+    content: "\25C6";
+    color: #107C41;
+    font-weight: bold;
+    display: inline-block; 
+    width: 1.3rem;
+    margin-left: -1.3rem;
+  }
+li{
+    margin-bottom: 1.7%;
+}
+
+li span{
+    font-weight: 600;
+}
+.modal-footer
+{
+    height: 15%;
+    border-top: 2px solid #a8a6a3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-footer .action-button{
+    height:40px;
+    width: 60px;
+}
 .sheet-options-modal{
     position: absolute;
     bottom: 4vh;
