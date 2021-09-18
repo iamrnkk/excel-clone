@@ -295,9 +295,9 @@ function openHelpModal(){
                                     <li><span>Basic: </span>Type numbers or text in Cells.</li>
                                     <li><span>Formatting: </span>Apply formatting by Selecting the cells and picking up formatting options from Menu Icon Bar.</li>
                                     <li><span>Multiple Select: </span>Select multiple Cells by pressing and holding ctrl key.</li>
-                                    <li><span>Add Sheets: </span>Add more Sheets by clicking on + in Sheet Bar.</li>
+                                    <li><span>Add Sheets: </span>Add more sheets by clicking on + in sheet Bar.</li>
                                     <li><span>Rename/Delete Sheets: </span>Right click on sheet to do the needful.</li>
-                                    <li><span>Formula: </span>Calculate Basic mathematical operations on cell By typing formula in Formula Bar. format: (2*A1 + 3/B1) where A1 and B1 are cell-addresses. </li>
+                                    <li><span>Formula: </span>Compute basic mathematical expressions on cell by typing formula in Formula Bar. format: (2*A1 + 3/B1) where A1 and B1 are cell-addresses. </li>
                                 </ul>
                                 </div>
                                 <div class="modal-footer"><div class="action-button ok-button">Ok</div></div>
